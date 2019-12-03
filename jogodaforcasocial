@@ -1,0 +1,230 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title> Jogo da Forca social - Javascript</title>
+        <meta charset="utf-8"/>
+        <style>
+            .letra{
+                width: 30px;
+                font-size: 30px;
+                text-transform: uppercase;
+                text-align: center;
+                margin: 5px;
+                display: none;
+            }
+            .letraj{
+                width: 30px;
+                font-size: 30px;
+                text-transform: uppercase;
+                text-align: center;
+                margin: 5px;
+            }
+            dvdisplay{
+                display: block;
+            }
+            #dvForca{
+                position:absolute;
+                left: 150px;
+            }
+            #cabeca{
+               
+               width:60px;
+   height:60px;
+   border:6px solid #000;
+   border-radius:50%;
+   
+            }
+            #corpo{
+                position:absolute;
+      width:3px;
+   height:80px;
+   border:2px solid #000;
+   margin-left:31px;
+   background-color:#000;
+            }
+            #bracoE{
+                position:absolute;
+      width:0px;
+   background-color:#000;
+   height:45px;
+   border:3px solid #000;
+   transform:rotate(-45deg);
+   margin-left:50px;
+            }
+            #bracoD{
+                  position:absolute;
+      width:0px;
+   background-color:#000;
+   height:45px;
+   border:3px solid #000;
+   transform:rotate(45deg);
+   margin-left:12px;
+            }
+            #pernaE{
+                  position:absolute;
+      width:0px;
+   background-color:#000;
+   height:45px;
+   border:3px solid #000;
+   transform:rotate(45deg);
+   margin:72px 0px 0px 12px;
+            }
+            #pernaD{
+               position:absolute;
+      width:0px;
+   background-color:#000;
+   height:45px;
+   border:3px solid #000;
+   transform:rotate(-45deg);
+   margin:72px 0px 0px 50px;
+            }
+        </style>
+        <script>
+
+            var biblioteca=["livro","policial","medico","bombeiro","chaveiro","eletricista","vendedor","motorista","encanador","engenheiro","Farmaceutico",
+            "biologo","juiz","arquiteto","artesão","professor","dentista","escritor","fisioterapeuta","jornalista"];
+            var qtde=biblioteca.length-1;
+            var pos=Math.round(Math.random()*qtde);
+            var palavra=biblioteca[pos];
+            var tam=palavra.length;
+            var cxLetras=[];
+            var acertos;
+            var errosMax=7;
+            var erros=0;
+            var desenhos=[];
+            var acertou=false;
+            var jogando=false;
+            var jog;
+
+            function defineLetras(L){
+                var obj;
+                for(var i=0;i<20;i++){
+                    obj=document.getElementById("letra"+i).value="";
+                    obj=document.getElementById("letra"+i).style.display="none";
+                }
+                for(var i=0;i<L;i++){
+                    obj=document.getElementById("letra"+i).style.display="inline-block";
+                }
+            }
+
+            function jogar(){
+                jog=document.getElementById("letraJ");
+                jog.focus();
+                if(jog.value==""){
+                    alert("Digite uma letra");
+                }else{
+                    if(jogando){
+                        var obj;
+                        var letraTmp;
+                        var letra;
+                        var pesq;
+                        letra=jog.value;
+                        jog.value="";
+                        acertou=false;
+                        pesq=palavra.match(letra);
+                        while(pesq!=null){
+                            letraTmp=palavra.search(letra);
+                            obj=document.getElementById("letra"+letraTmp).value=letra;
+                            palavra=palavra.replace(letra,'0');
+                            acertos++;
+                            pesq=palavra.match(letra);
+                            acertou=true;
+                        }
+                        if(!acertou){
+                            document.getElementById("dvletrasdigitadas").innerHTML+=letra.toUpperCase() + " ";
+                            erros++;
+                            if(erros<=6){
+                                desenhos[erros].style.display="block";
+                            }else{
+                                document.getElementById("dvmsg").src="";
+                                document.getElementById("dvmsg").innerHTML="PERDEU";
+                                jogando=false;
+                            }
+                        }
+                        if(acertos==tam){
+                            document.getElementById("dvmsg").innerHTML="";
+                            document.getElementById("dvmsg").innerHTML="GANHOU";
+                            jogando=false;
+                        }
+                    }
+                }
+            }
+
+            function inicia(){
+                jogando=true;
+                jog=document.getElementById("letraJ");
+                jog.value="";
+                jog.focus();
+                acertos=0;
+                erros=0;
+                acertos=false;
+                document.getElementById("dvletrasdigitadas").innerHTML="Letras Digitadas:";
+                pos=Math.round(Math.random()*qtde);
+                palavra=biblioteca[pos];
+                tam=palavra.length;
+                defineLetras(tam);
+                document.getElementById("dvmsg").innerHTML="";
+                desenhos[1]=document.getElementById("cabeca");
+                desenhos[2]=document.getElementById("corpo");
+                desenhos[3]=document.getElementById("bracoE");
+                desenhos[4]=document.getElementById("bracoD");
+                desenhos[5]=document.getElementById("pernaE");
+                desenhos[6]=document.getElementById("pernaD");
+                document.getElementById("cabeca").src="cabeca";
+                for(var i=1;i<7;i++){
+                    desenhos[i].style.display="none";
+                }
+             }
+
+             
+             window.addEventListener("load",inicia);
+
+        </script>
+    </head>
+    <body>
+
+        <div id="dvmenu" class="dvdisplay">
+            <button onclick="inicia()">Nova palavra</button>
+        </div>
+        <div id="dvplavra" class="dvdisplay">
+            <input type="text" id="letra0" class="letra" maxlength="1">
+            <input type="text" id="letra1" class="letra" maxlength="1">
+            <input type="text" id="letra2" class="letra" maxlength="1">
+            <input type="text" id="letra3" class="letra" maxlength="1">
+            <input type="text" id="letra4" class="letra" maxlength="1">
+            <input type="text" id="letra5" class="letra" maxlength="1">
+            <input type="text" id="letra6" class="letra" maxlength="1">
+            <input type="text" id="letra7" class="letra" maxlength="1">
+            <input type="text" id="letra8" class="letra" maxlength="1">
+            <input type="text" id="letra9" class="letra" maxlength="1">
+            <input type="text" id="letra10" class="letra" maxlength="1">
+            <input type="text" id="letra11" class="letra" maxlength="1">
+            <input type="text" id="letra12" class="letra" maxlength="1">
+            <input type="text" id="letra13" class="letra" maxlength="1">
+            <input type="text" id="letra14" class="letra" maxlength="1">
+            <input type="text" id="letra15" class="letra" maxlength="1">
+            <input type="text" id="letra16" class="letra" maxlength="1">
+            <input type="text" id="letra17" class="letra" maxlength="1">
+            <input type="text" id="letra18" class="letra" maxlength="1">
+            <input type="text" id="letra19" class="letra" maxlength="1">
+        </div>
+        <div id="dvjogador" class="dvdisplay">
+            <div id="controlesJogador">
+                <input type="text" id="letraJ" class="letraJ" maxlength="1">
+                <button onclick="jogar()">jogar</button>
+                <div id="dvmsg"></div><br>
+                <div id="dvletrasdigitadas">Letras Digitadas:</div>
+            </div>
+            <div id="dvForca">
+                <img id="cabeca" src="cabeca.png">
+                <img id="corpo" src="corpo.png">
+                <img id="bracoE" src="bracoE.png">
+                <img id="bracoD" src="bracoD.png">
+                <img id="pernaE" src="pernaE.png">
+                <img id="pernaD" src="pernaD.png">
+            </div> 
+        </div>
+    </body>
+</html>
